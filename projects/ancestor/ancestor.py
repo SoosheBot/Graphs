@@ -9,22 +9,19 @@ def earliest_ancestor(ancestors, starting_node):
         else:
             parents[elder[1]].append(elder[0])
 
-    # current_node = starting_node
-
     # if the starting node has no parents then we just leave now
     if starting_node not in parents:
         return -1
     
-    current_elders = parents[starting_node]
-    # visited = set()
+    current_gen = parents[starting_node]
 
     while True:
-        new_elders = []
-        for elder in current_elders:
+        new_gen = []
+        for elder in current_gen:
             if elder in parents:
-                new_elders = new_elders + parents[elder]
+                new_gen = new_gen + parents[elder]
         
-        if len(new_elders) == 0:
-            return current_elders[0]
+        if len(new_gen) == 0:
+            return current_gen[0]
         else:
-            current_elders = new_elders
+            current_gen = new_gen
