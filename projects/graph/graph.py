@@ -88,7 +88,7 @@ class Graph:
         """
         queue = Queue()
         visited = set()
-        queue.enqueue(starting_vertex)
+        queue.enqueue([starting_vertex])
 
         while queue.size() > 0:
             current_path = queue.dequeue()
@@ -96,14 +96,16 @@ class Graph:
 
             if current_node not in visited:
                 visited.add(current_node)
-                neighborhood = self.get_neighbors(current_node)
-                for neighbor in neighborhood:
-                    next = current_path + [neighbor]
-                    queue.enqueue(next)
+                
+            neighborhood = self.get_neighbors(current_node)
+            for neighbor in neighborhood:
+                next = current_path.copy()
+                next.append(neighbor)
 
-                # if neighbor == destination_vertex:
-                #     return next
-                # queue_path.enqueue(next)
+                if neighbor == destination_vertex:
+                    return next
+                queue.enqueue(next)
+
 
 
     def dfs(self, starting_vertex, destination_vertex):
@@ -115,7 +117,7 @@ class Graph:
         visited = set()
         stack = Stack()
 
-        stack.push(starting_vertex)
+        stack.push([starting_vertex])
 
         while stack.size() > 0:
             current_node = stack.pop()
