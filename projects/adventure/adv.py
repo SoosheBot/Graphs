@@ -1,6 +1,7 @@
 from room import Room
 from player import Player
 from world import World
+from util import Queue
 
 import random
 from ast import literal_eval
@@ -10,9 +11,9 @@ world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-# map_file = "projects/adventure/maps/test_line.txt"
+map_file = "projects/adventure/maps/test_line.txt"
 # map_file = "projects/adventure/maps/test_cross.txt"
-map_file = "projects/adventure/maps/test_loop.txt"
+# map_file = "projects/adventure/maps/test_loop.txt"
 # map_file = "projects/adventure/maps/test_loop_fork.txt"
 # map_file = "projects/adventure/maps/main_maze.txt"
 
@@ -32,6 +33,28 @@ visited = {}
 backtrack_traversal_path = []
 directions = {"n": "s", "e": "w", "s": "n", "w": "e"}
 
+
+visited[player.current_room.id] = player.current_room.get_exits()
+
+while len(visited) < len(room_graph):
+    print(player.current_room.id)
+
+    if player.current_room.id not in visited:
+        visited[player.current_room.id] = player.current_room.get_exits()
+        random.shuffle(visited[player.current_room.id])
+        final_direction = backtrack_traversal_path[-1]
+        visited[player.current_room.id].remove(final_direction)
+
+        while len(visited[player.current_room.id]) < 1:
+            final_direction = backtrack_traversal_path.pop()
+            traversal_path.append(final_direction)
+            player.travel(final_direction)
+        
+        direction_moved = visited[player.current_room.id].pop(0)
+        traversal_path.append(direction_moved)
+        backtrack_traversal_path.append(directions[direction_moved])
+        player.travel(direction_moved)
+        
 
 # TRAVERSAL TEST
 visited_rooms = set()
