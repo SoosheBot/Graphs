@@ -28,7 +28,9 @@ player = Player(world.starting_room)
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
 traversal_path = []
-
+visited = {}
+backtrack_traversal_path = []
+directions = {"n": "s", "e": "w", "s": "n", "w": "e"}
 
 
 # TRAVERSAL TEST
