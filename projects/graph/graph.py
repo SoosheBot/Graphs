@@ -78,7 +78,7 @@ class Graph:
         """
 
         if starting_vertex not in visited:
-            print(starting_vertex)
+            #print(starting_vertex)
             visited.add(starting_vertex)
             neighborhood = self.get_neighbors(starting_vertex)
             for neighbor in neighborhood:

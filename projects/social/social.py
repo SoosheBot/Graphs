@@ -45,7 +45,7 @@ class SocialGraph:
             random_index = random.randint(i, len(l) -1)
             l[random_index], l[i] = l[i], l[random_index]
 
-
+    # Reset your last id to zero and the users + friendship dicts too, clean slate.
     def populate_graph(self, num_users, avg_friendships):
         """
         Takes a number of users and an average number of friendships as arguments.
@@ -60,7 +60,7 @@ class SocialGraph:
         for i in range(num_users):
             self.add_user(f'user {i}')
         
-        # Add users
+        # Add users by looping through them and then using the add user function 
         for user in range(num_users):
             self.add_user(user)
         # starts at 1, up to and including num_users
@@ -73,7 +73,7 @@ class SocialGraph:
             for friend in range(user + 1, self.last_id + 1):
                 friendship_combinations.append((user, friend))
         
-        # shuffle the list
+        # shuffle the list with the witchcraft function
         self.fisher_yates_shuffle(friendship_combinations)
 
         # then grab the first N elements from the list.
@@ -85,14 +85,16 @@ class SocialGraph:
         for friendship in friends_to_make:
             self.add_friendship(friendship[0], friendship[1])
 
-
+    #setup the queue and an open dict to scoot friends youve visited into.
+    #enque your first user
+    #while the size of the queue is greater than zero, we need to go down the paths and check who's all there. So, we set the current path equal to a dequeued queue and set the current node equal to the ??? 
     def get_all_social_paths(self, user_id): 
         q = Queue()
         visited = {}
         q.enqueue([user_id])
 
         while q.size() > 0:
-            
+            # take it off the queue
             current_path = q.dequeue()
             current_node = current_path[-1]
 
