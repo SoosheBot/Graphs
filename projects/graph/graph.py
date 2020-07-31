@@ -19,6 +19,7 @@ class Graph:
         """
         Add a directed edge to the graph.
         """
+        # print("self.vertices", self.vertices)
         self.vertices[v1].add(v2)
         # does this need an if/else statement to cover if there isn't an edge? something like if v1 and v2 are in self.vertices then add v2 to v1, else print an error...
 
@@ -26,6 +27,7 @@ class Graph:
         """
         Get all neighbors (edges) of a vertex.
         """
+        # print("vertex_id", vertex_id)
         return self.vertices[vertex_id]
 
     def bft(self, starting_vertex):
@@ -35,9 +37,11 @@ class Graph:
         """
         queue = Queue()
         visited = set()
+        #add starting_vertex to queue
         queue.enqueue(starting_vertex)
 
         while queue.size() > 0:
+            #basically doing a loop to check if the current node is in the visited set or not. if it is not, then it gets added to visited, otherwise we check the neighborhood for current_node and then add it to the queue. 
             current_node = queue.dequeue()
 
             if current_node not in visited:
@@ -99,12 +103,13 @@ class Graph:
                 
             neighborhood = self.get_neighbors(current_node)
             for neighbor in neighborhood:
-                next = current_path.copy()
-                next.append(neighbor)
+                #do not use next -- use next_path or something like that -- next is a built in you overrode
+                next_path = current_path.copy()
+                next_path.append(neighbor)
 
                 if neighbor == destination_vertex:
-                    return next
-                queue.enqueue(next)
+                    return next_path
+                queue.enqueue(next_path)
 
 
 
@@ -128,12 +133,12 @@ class Graph:
 
             neighborhood = self.get_neighbors(last_vertex)
             for neighbor in neighborhood:
-                next = current_node.copy()
-                next.append(neighbor)
+                next_path = current_node.copy()
+                next_path.append(neighbor)
 
                 if neighbor == destination_vertex:
-                    return next
-                stack.push(next)
+                    return next_path
+                stack.push(next_path)
 
 
     def dfs_recursive(self, starting_vertex, destination_vertex, path=[], visited=set()):

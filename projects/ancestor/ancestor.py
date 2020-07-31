@@ -27,3 +27,6 @@ def earliest_ancestor(ancestors, starting_node):
             return current_gen[0]
         else:
             current_gen = new_gen
+
+
+    
