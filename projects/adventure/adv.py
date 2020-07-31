@@ -1,10 +1,13 @@
 from room import Room
 from player import Player
 from world import World
-from util import Queue
+from util import Stack, Queue
+
 
 import random
 from ast import literal_eval
+
+
 
 # Load world
 world = World()
@@ -30,30 +33,40 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 visited = {}
-backtrack_traversal_path = []
+backtrack_path = []
 directions = {"n": "s", "e": "w", "s": "n", "w": "e"}
 
-
+#begin in first room -- look for exits
 visited[player.current_room.id] = player.current_room.get_exits()
 
-while len(visited) < len(room_graph):
-    print(player.current_room.id)
-
+#traverse the room -- when we start off, the number of rooms we have visited will be less than the total number of rooms
+while len(visited) < len(room_graph) - 1:
     if player.current_room.id not in visited:
-        visited[player.current_room.id] = player.current_room.get_exits()
-        random.shuffle(visited[player.current_room.id])
-        final_direction = backtrack_traversal_path[-1]
-        visited[player.current_room.id].remove(final_direction)
+        #add the room to the visited dict and then look for its exits
+        visited[player.current_room.id]  = player.current_room.get_exits()
 
-        while len(visited[player.current_room.id]) < 1:
-            final_direction = backtrack_traversal_path.pop()
-            traversal_path.append(final_direction)
-            player.travel(final_direction)
-        
-        direction_moved = visited[player.current_room.id].pop(0)
-        traversal_path.append(direction_moved)
-        backtrack_traversal_path.append(directions[direction_moved])
-        player.travel(direction_moved)
+        #remove exits one at a time so we don't backtrack before we are all the way done
+        visited[player.current_room.id].remove(backtrack_path[1])
+
+    #When we finally run out of rooms we can backtrack
+    while len(visited[player.current_room.id]) == 0:
+        #go back from the way we came in
+        backtrack = backtrack_path.pop()
+
+        #like Theseus and his ball of yarn, we wind our way back the way we came
+        traversal_path.append(backtrack)
+        #move the player in the opposite direction from whence they came
+        player.travel(backtrack)
+    
+    #find the first available exit -- which is the one that was most recently added to the list of room entry/exits -- and then update the path
+    journey = visited[player.current_room.id].pop()
+    traversal_path.append(journey)
+
+    #now we have to update the backtracking path too, since we're taking all of the things out of its basket
+    backtrack_path.append(directions[journey])
+
+    #move the player in that direction and backtrack along
+    player.travel(journey)
         
 
 # TRAVERSAL TEST
